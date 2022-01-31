@@ -4,7 +4,13 @@ Demo application developed in Blazor Web Assembly with the help of SQL Server da
 
 ## Scaffolding Database
 
+> Initial database scaffolding
+
 ![image](https://user-images.githubusercontent.com/49655304/151779519-fc9ade9a-4236-4bcb-a7ea-69060b8a91ca.png)
+
+> Database scaffolding following the ApplicationUser change ([view this commit](https://github.com/AepServerNet/DemoBlazorAuthentication/commit/4a351944121f348647c88cbca7a4c678a53fefaf))
+
+![image](https://user-images.githubusercontent.com/49655304/151834140-3b26d9e0-f41c-4355-8afe-59c881947105.png)
 
 ## Scaffolding ASP.NET Core Identity
 
