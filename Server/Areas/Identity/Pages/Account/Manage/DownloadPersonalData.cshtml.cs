@@ -30,7 +30,7 @@ namespace DemoBlazorAuthentication.Server.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Non è stato possibile trovare il profilo utente con ID '{_userManager.GetUserId(User)}'.");
             }
 
             _logger.LogInformation("User with ID '{UserId}' asked for their personal data.", _userManager.GetUserId(User));
@@ -47,7 +47,7 @@ namespace DemoBlazorAuthentication.Server.Areas.Identity.Pages.Account.Manage
             var logins = await _userManager.GetLoginsAsync(user);
             foreach (var l in logins)
             {
-                personalData.Add($"{l.LoginProvider} external login provider key", l.ProviderKey);
+                personalData.Add($"Chiave di autenticazione con il servizio esterno {l.LoginProvider}", l.ProviderKey);
             }
 
             Response.Headers.Add("Content-Disposition", "attachment; filename=PersonalData.json");
