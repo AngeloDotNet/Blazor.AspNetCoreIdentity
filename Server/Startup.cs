@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using System;
 
 namespace DemoBlazorAuthentication.Server
@@ -26,7 +27,17 @@ namespace DemoBlazorAuthentication.Server
             services.AddMvc();
             services.AddRazorPages();
 
-            services.AddDatabaseDeveloperPageExceptionFilter();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Demo Blazor Authentication", Version = "v1" });
+            });
+
+            services.AddCors(o => o.AddPolicy("AllowAllCors", builder => 
+            { 
+                builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader(); 
+            }));
 
             var identityBuilder = services.AddDefaultIdentity<ApplicationUser>(options =>
             {
@@ -80,6 +91,9 @@ namespace DemoBlazorAuthentication.Server
             {
                 app.UseDeveloperExceptionPage();
                 app.UseWebAssemblyDebugging();
+
+                app.UseSwagger();
+                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Demo Blazor Authentication v1"));
             }
             else
             {
@@ -97,6 +111,7 @@ namespace DemoBlazorAuthentication.Server
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseCors("AllowAllCors");
 
             app.UseIdentityServer();
             app.UseAuthentication();

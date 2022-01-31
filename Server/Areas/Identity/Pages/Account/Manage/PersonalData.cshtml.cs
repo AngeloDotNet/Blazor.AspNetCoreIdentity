@@ -25,7 +25,7 @@ namespace DemoBlazorAuthentication.Server.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Non è stato possibile caricare il profilo utente con ID '{_userManager.GetUserId(User)}'.");
             }
 
             return Page();
