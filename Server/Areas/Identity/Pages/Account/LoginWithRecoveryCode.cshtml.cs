@@ -32,9 +32,9 @@ namespace DemoBlazorAuthentication.Server.Areas.Identity.Pages.Account
         public class InputModel
         {
             [BindProperty]
-            [Required]
+            [Required(ErrorMessage = "Il codice di recupero è obbligatorio")]
             [DataType(DataType.Text)]
-            [Display(Name = "Recovery Code")]
+            [Display(Name = "Codice di recupero")]
             public string RecoveryCode { get; set; }
         }
 
@@ -44,7 +44,7 @@ namespace DemoBlazorAuthentication.Server.Areas.Identity.Pages.Account
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
             {
-                throw new InvalidOperationException($"Unable to load two-factor authentication user.");
+                throw new InvalidOperationException($"Non è stato possibile trovare l'utente per l'autenticazione due fattori.");
             }
 
             ReturnUrl = returnUrl;
@@ -62,7 +62,7 @@ namespace DemoBlazorAuthentication.Server.Areas.Identity.Pages.Account
             var user = await _signInManager.GetTwoFactorAuthenticationUserAsync();
             if (user == null)
             {
-                throw new InvalidOperationException($"Unable to load two-factor authentication user.");
+                throw new InvalidOperationException($"Non è stato possibile trovare l'utente per l'autenticazione due fattori.");
             }
 
             var recoveryCode = Input.RecoveryCode.Replace(" ", string.Empty);
@@ -82,7 +82,7 @@ namespace DemoBlazorAuthentication.Server.Areas.Identity.Pages.Account
             else
             {
                 _logger.LogWarning("Invalid recovery code entered for user with ID '{UserId}' ", user.Id);
-                ModelState.AddModelError(string.Empty, "Invalid recovery code entered.");
+                ModelState.AddModelError(string.Empty, "È stato fornito un codice di recupero non valido.");
                 return Page();
             }
         }
