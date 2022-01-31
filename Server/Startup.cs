@@ -1,6 +1,6 @@
-using DemoBlazorAuthentication.Server.Data;
 using DemoBlazorAuthentication.Server.Models.Entities;
 using DemoBlazorAuthentication.Server.Models.Enums;
+using DemoBlazorAuthentication.Server.Models.Services.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +9,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.IO;
 
 namespace DemoBlazorAuthentication.Server
 {
@@ -27,14 +26,8 @@ namespace DemoBlazorAuthentication.Server
             services.AddMvc();
             services.AddRazorPages();
 
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(
-            //        Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDatabaseDeveloperPageExceptionFilter();
 
-            //services.AddDatabaseDeveloperPageExceptionFilter();
-
-            //services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-            //    .AddEntityFrameworkStores<ApplicationDbContext>();
             var identityBuilder = services.AddDefaultIdentity<ApplicationUser>(options =>
             {
                 // Criteri di validazione della password
@@ -63,9 +56,8 @@ namespace DemoBlazorAuthentication.Server
                     identityBuilder.AddEntityFrameworkStores<ApplicationDbContext>();
 
                     // Usando AddDbContextPool, il DbContext verrà implicitamente registrato con il ciclo di vita Scoped
-                    services.AddDbContextPool<ApplicationDbContext>(optionsBuilder => {
-                        string connectionString = Configuration.GetSection("ConnectionStrings").GetValue<string>("DefaultConnection");
-                        optionsBuilder.UseSqlServer(connectionString, options =>
+                    services.AddDbContext<ApplicationDbContext>(optionsBuilder => {
+                        optionsBuilder.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), options => 
                         {
                             // Abilito il connection resiliency - Info su: https://docs.microsoft.com/en-us/ef/core/miscellaneous/connection-resiliency
                             options.EnableRetryOnFailure(3);
@@ -80,24 +72,10 @@ namespace DemoBlazorAuthentication.Server
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
-
-            //services.AddControllersWithViews();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //if (env.IsDevelopment())
-            //{
-            //    app.UseDeveloperExceptionPage();
-            //    app.UseMigrationsEndPoint();
-            //    app.UseWebAssemblyDebugging();
-            //}
-            //else
-            //{
-            //    app.UseExceptionHandler("/Error");
-            //    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-            //    app.UseHsts();
-            //}
             if (env.IsEnvironment("Development"))
             {
                 app.UseDeveloperExceptionPage();
